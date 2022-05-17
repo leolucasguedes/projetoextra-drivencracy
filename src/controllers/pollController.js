@@ -1,4 +1,5 @@
 import db from "../app/database.js";
+import dayjs from "dayjs";
 
 import { poolSchema } from "../schemas/validateSchemas.js";
 
@@ -10,7 +11,7 @@ export async function createPool(req,res){
     try{
         await db.collection("pools").insertOne({
             title: req.body.title,
-            expireAt: req.body.expireAt
+            expireAt: req.body.expireAt || dayjs().add(30, 'day')
         });
         res.status(201).send("Enquete criada com sucesso");
     }catch(e){

@@ -4,6 +4,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 
 import poolRouter from "./../routes/poolRouter.js";
+import choiceRouter from "./../routes/choiceRouter.js"
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(json());
 
 app.use(poolRouter);
+app.use(choiceRouter);
 
 const PORT = process.env.PORT || 5000
 
