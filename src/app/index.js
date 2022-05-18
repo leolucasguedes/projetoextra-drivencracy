@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 
 import poolRouter from "./../routes/poolRouter.js";
 import choiceRouter from "./../routes/choiceRouter.js"
+import voteRouter from "./../routes/voteeRouter.js"
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(json());
 
 app.use(poolRouter);
 app.use(choiceRouter);
+app.use(voteRouter);
 
 const PORT = process.env.PORT || 5000
 
