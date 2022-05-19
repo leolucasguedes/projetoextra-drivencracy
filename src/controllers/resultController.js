@@ -20,20 +20,32 @@ export async function getResult(req, res) {
         votes: 0,
       };
 
-      console.log(idsChoice);
       idsChoice.forEach((choiceid) => {
-        const targetVotes = votes.filter((vote) => vote.choiceId === choiceid);
-        console.log(targetVotes);
+        const targetVotes = [];
+        votes.filter((vote) => {
+          let choicestring = choiceid.toString();
+          let votestring = vote.choiceId.toString();
+          if(votestring === choicestring){
+            targetVotes.push(vote)
+          }
+        })
 
         if (winner.votes < targetVotes.length) {
-          const targetChoice = choices.filter((choice) => choice._id === choiceid);
+          const targetChoice = [];
+          choices.filter((choice) => {
+            let choiceidstring = choiceid.toString();
+            let choicestring = choice._id.toString();
+            if(choicestring === choiceidstring){
+              targetChoice.push(choice.title)
+            }
+          })
+          choices.filter((choice) => choice._id === choiceid);
           winner = {
-            title: targetChoice.title,
+            title: targetChoice[0],
             votes: targetVotes.length,
           };
         }
       });
-      console.log(winner);
 
       const result = {
         _id: _id,
