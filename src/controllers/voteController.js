@@ -23,7 +23,7 @@ export async function createVote(req, res) {
   try {
     await db.collection("votes").insertOne({
       createdAt: dayjs().format("YYYY-MM-DD HH:mm"),
-      choiceId: id,
+      choiceId: new ObjectId(id),
     });
     res.status(201).send("Voto salvo com sucesso");
   } catch (e) {
