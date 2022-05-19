@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 
 import { createChoice, getChoices } from "../controllers/choiceController.js";
 

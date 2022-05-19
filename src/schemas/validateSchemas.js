@@ -7,5 +7,5 @@ export const poolSchema = joi.object({
 
 export const choiceSchema = joi.object({
   title: joi.string().min(1).required(),
-  poolId: joi.string().required,
+  poolId: joi.string().required(),
 });

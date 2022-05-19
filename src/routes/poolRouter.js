@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 
 import { createPool, getPools } from "../controllers/pollController.js";
 

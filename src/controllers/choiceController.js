@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import db from "../app/database.js";
 import dayjs from "dayjs";
 
@@ -9,17 +10,18 @@ export async function createChoice(req, res) {
   if (error) {
     return res.sendStatus(422);
   }
-  const poolValid = await db.collection("pools").findOne({ poolId });
+  const poolValid = await db
+    .collection("pools")
+    .findOne({ _id: new ObjectId(poolId) });
   if (!poolValid) {
     return res.status(404).send("Enquete não encontrada");
   }
-  //console.log(poolValid);
   const { expireAt } = poolValid;
   let now = dayjs();
   if (now.isAfter(dayjs(expireAt))) {
     return res.status(403).send("Enquete expirada");
   }
-  const choiceValid = await db.collection("choices").findOne({ title });
+  const choiceValid = await db.collection("choices").findOne({ title: title });
   if (choiceValid) {
     return res.status(409).send("Opção de voto já existe.");
   }
@@ -36,13 +38,18 @@ export async function createChoice(req, res) {
 }
 
 export async function getChoices(req, res) {
-  const id = req.params.id;
-  const poolValid = await db.collection("pools").findOne({ id });
+  const { id } = req.params;
+  const poolValid = await db
+    .collection("pools")
+    .findOne({ _id: new ObjectId(id) });
   if (!poolValid) {
     return res.status(404).send("Enquete não encontrada");
   }
   try {
-    const choices = await db.collection("choices").find({}).toArray();
+    const choices = await db
+      .collection("choices")
+      .find({ poolId: id })
+      .toArray();
     res.status(200).send(choices);
   } catch (err) {
     res.status(401).send("Erro ao carregar as escolhas");

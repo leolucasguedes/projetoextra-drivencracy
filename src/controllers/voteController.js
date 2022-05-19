@@ -1,14 +1,20 @@
+import { ObjectId } from "mongodb";
 import db from "../app/database.js";
 import dayjs from "dayjs";
 
 export async function createVote(req, res) {
-  const { id, createdAt, choiceId } = req.body;
+  const { id } = req.params;
 
-  const choiceValid = await db.collection("choices").findOne({ id });
+  const choiceValid = await db
+    .collection("choices")
+    .findOne({ _id: new ObjectId(id) });
   if (!choiceValid) {
-    return res.status(404).send("Enquete não encontrada");
+    return res.status(404).send("Escolha não encontrada");
   }
-  const poolValid = await db.collection("pools").findOne({ id });
+  const { poolId } = choiceValid;
+  const poolValid = await db
+    .collection("pools")
+    .findOne({ _id: new ObjectId(poolId) });
   const { expireAt } = poolValid;
   let now = dayjs();
   if (now.isAfter(dayjs(expireAt))) {
@@ -16,9 +22,8 @@ export async function createVote(req, res) {
   }
   try {
     await db.collection("votes").insertOne({
-      id,
-      createdAt,
-      choiceId,
+      createdAt: dayjs().format("YYYY-MM-DD HH:mm"),
+      choiceId: id,
     });
     res.status(201).send("Voto salvo com sucesso");
   } catch (e) {
